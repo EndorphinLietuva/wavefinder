@@ -6,44 +6,21 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use App\Models\RadioStation;
+use Carbon\Carbon;
 
 // ! VELIAU PADARYTI SERVICE NORMALIAI
 class SeedStations extends Command
 {
-	/**
-	 * The name and signature of the console command.
-	 *
-	 * @var string
-	 */
 	protected $signature = "radio:seed-stations";
+	protected $description = "Seed radio stations from API";
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = "Command description";
-
-	/**
-	 * API endpoint for radio stations.
-	 *
-	 * @var string
-	 */
-	protected $apiUrl = "";
-
-	/**
-	 * HTTP client instance.
-	 *
-	 * @var Client
-	 */
+	protected $apiUrl;
 	protected $client;
 
-	/**
-	 * Execute the console command.
-	 */
 	public function handle()
 	{
-		$this->info("Starting to fetch radio stations...");
 		$this->apiUrl = Cache::get("radio.fastest_dns");
 		if (!$this->apiUrl) {
 			$this->error(
@@ -52,64 +29,139 @@ class SeedStations extends Command
 			return 1;
 		}
 
-		$this->apiUrl = $this->apiUrl . "/json/stations";
-		$chunkSize = 10000;
-		$offset = 0;
-		$timeout = 5;
-		if (config("app.debug")) {
-			$timeout = 30;
-		}
-		$client = new Client([
-			"timeout" => $timeout
-		]);
+		$this->client = new Client(["timeout" => config("app.debug") ? 30 : 5]);
+		$this->apiUrl .= "/json/stations";
 
-		$allFilteredStations = collect();
+		$this->info("Starting seeding process...");
+
+		// ! padaryti kad nedropintu o neaktyvias archyvuotu (sugalvoti logika)
+		$this->truncateTable();
+		$this->seedStations();
+
+		$this->info("\nSeeding completed successfully.");
+		return 0;
+	}
+
+	protected function truncateTable()
+	{
+		$this->info("Truncating table...");
+		DB::table("radio_stations")->truncate();
+	}
+
+	protected function seedStations()
+	{
+		$offset = 0;
+		$totalInserted = 0;
+		$chunkSize = 10;
+		$progressBar = $this->output->createProgressBar();
 
 		while (true) {
-			$response = $client->get($this->apiUrl, [
-				"query" => [
-					"limit" => $chunkSize,
-					"offset" => $offset
-				]
-			]);
+			try {
+				$response = $this->client->get($this->apiUrl, [
+					"query" => [
+						"limit" => $chunkSize,
+						"offset" => $offset,
+						"hidebroken" => "true"
+					]
+				]);
 
-			$stations = json_decode($response->getBody(), true);
-			$type = gettype($stations);
+				$stations = json_decode($response->getBody(), true);
 
-			$this->info("The variable type is: " . $type);
-
-			// Convert the batch to a collection and apply the stacked filters.
-			$filteredStations = collect($stations)->filter(function ($station) {
-				return $this->applyFilters($station);
-			});
-
-			// Merge the filtered batch into the final collection.
-			$allFilteredStations = $allFilteredStations->merge(
-				$filteredStations
-			);
-
-			if (config("app.debug")) {
-				if (count($allFilteredStations) > 5000) {
+				if (empty($stations)) {
+					$this->error("No stations found.");
 					break;
 				}
-			}
 
-			// If fewer stations than the limit were returned, we've reached the end.
-			if (count($stations) < $chunkSize) {
+				$filtered = $this->processBatch($stations);
+				$this->insertBatch($filtered);
+
+				$totalInserted += count($filtered);
+				$progressBar->advance(count($filtered));
+
+				// Break conditions
+				if (count($stations) < $chunkSize) {
+					break;
+				}
+				if (config("app.debug") && $totalInserted >= $chunkSize) {
+					break;
+				}
+
+				$offset += $chunkSize;
+			} catch (\Exception $e) {
+				$this->error("\nError: " . $e->getMessage());
 				break;
 			}
-
-			$offset += $chunkSize;
 		}
 
-		$this->info(
-			"Total filtered stations: " . $allFilteredStations->count()
-		);
-		$this->info("Radio stations fetched and filtered successfully.");
+		$progressBar->finish();
+		$this->info("\nTotal stations inserted: " . $totalInserted);
+	}
 
-		// TODO: saugoti i db
+	protected function processBatch(array $stations): array
+	{
+		return collect($stations)
+			->filter(fn($station) => $this->applyFilters($station))
+			->map(function ($station) {
+				return [
+					"changeuuid" => $station["changeuuid"],
+					"stationuuid" => $station["stationuuid"],
+					"serveruuid" => $station["serveruuid"],
+					"name" => $station["name"],
+					"url" => $station["url"],
+					"url_resolved" => $station["url_resolved"],
+					"homepage" => $station["homepage"],
+					"favicon" => $station["favicon"],
+					"tags" => $station["tags"],
+					"country" => $station["country"],
+					"countrycode" => $station["countrycode"],
+					"iso_3166_2" => $station["iso_3166_2"],
+					"state" => $station["state"],
+					"language" => $station["language"],
+					"languagecodes" => $station["languagecodes"],
+					"votes" => $station["votes"],
+					"lastchangetime" => Carbon::parse(
+						$station["lastchangetime"]
+					),
+					"codec" => $station["codec"],
+					"bitrate" => $station["bitrate"],
+					"hls" => $station["hls"],
+					"lastcheckok" => $station["lastcheckok"],
+					"lastchecktime" => Carbon::parse($station["lastchecktime"]),
+					"lastcheckoktime" => Carbon::parse(
+						$station["lastcheckoktime"]
+					),
+					"lastlocalchecktime" => Carbon::parse(
+						$station["lastlocalchecktime"]
+					),
+					"clicktimestamp" => Carbon::parse(
+						$station["clicktimestamp"]
+					),
+					"clickcount" => $station["clickcount"],
+					"clicktrend" => $station["clicktrend"],
+					"ssl_error" => $station["ssl_error"],
+					"geo_lat" => $station["geo_lat"],
+					"geo_long" => $station["geo_long"],
+					"geo_distance" => $station["geo_distance"],
+					"has_extended_info" => $station["has_extended_info"]
+				];
+			})
+			->toArray();
+	}
 
-		return 0;
+	protected function insertBatch(array $stations)
+	{
+		if (empty($stations)) {
+			return;
+		}
+
+		try {
+			DB::beginTransaction();
+			RadioStation::insert($stations);
+			DB::commit();
+		} catch (\Exception $e) {
+			DB::rollBack();
+			$this->error("Batch insert failed: " . $e->getMessage());
+		}
 	}
 
 	/**
