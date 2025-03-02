@@ -1,5 +1,33 @@
 {
-	"tabWidth": 12,
+	"tabWidth": 4,
 	"useTabs": true,
-	"plugins": ["@prettier/plugin-php"]
+	"singleQuote": false,
+	"trailingComma": "none",
+	"bracketSameLine": true,
+	"semi": true,
+	"bracketSpacing": true,
+	"arrowParens": "always",
+	"endOfLine": "auto",
+	"plugins": ["@prettier/plugin-php", "@shufo/prettier-plugin-blade"],
+	"overrides": [
+		{
+			"files": ["*.php"],
+			"excludeFiles": ["*.blade.php"],
+			"options": {
+				"parser": "php",
+				"phpVersion": "8.4",
+				"trailingCommaPHP": false
+			}
+		},
+		{
+			"files": ["*.blade.php"],
+			"options": {
+				"parser": "blade",
+				"indentInnerHtml": true,
+				"useTabs": false,
+				"wrapAttributes": "force-aligned",
+				"printWidth": 999
+			}
+		}
+	]
 }
