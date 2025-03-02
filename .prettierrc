@@ -1,57 +1,32 @@
 {
 	"tabWidth": 4,
-	"useTabs": false,
-	"singleQuote": true,
-	"printWidth": 120,
-	"trailingComma": "all",
+	"useTabs": true,
+	"singleQuote": false,
+	"trailingComma": "none",
+	"bracketSameLine": true,
 	"semi": true,
 	"bracketSpacing": true,
 	"arrowParens": "always",
 	"endOfLine": "auto",
-	"plugins": ["@prettier/plugin-php"],
+	"plugins": ["@prettier/plugin-php", "@shufo/prettier-plugin-blade"],
 	"overrides": [
 		{
 			"files": ["*.php"],
+			"excludeFiles": ["*.blade.php"],
 			"options": {
+				"parser": "php",
 				"phpVersion": "8.4",
-				"braceStyle": "psr-2",
-				"trailingCommaPHP": true
+				"trailingCommaPHP": false
 			}
 		},
 		{
 			"files": ["*.blade.php"],
 			"options": {
-				"parser": "php",
-				"tabWidth": 4,
-				"printWidth": 120
-			}
-		},
-		{
-			"files": ["*.js", "*.jsx"],
-			"options": {
-				"jsxSingleQuote": true,
-				"bracketSameLine": true,
-				"singleQuote": true,
-				"trailingComma": "all"
-			}
-		},
-		{
-			"files": ["*.css", "*.scss"],
-			"options": {
-				"printWidth": 120
-			}
-		},
-		{
-			"files": ["*.html"],
-			"options": {
-				"printWidth": 120,
-				"singleQuote": true
-			}
-		},
-		{
-			"files": ["*.json"],
-			"options": {
-				"printWidth": 120
+				"parser": "blade",
+				"indentInnerHtml": true,
+				"useTabs": false,
+				"wrapAttributes": "force-aligned",
+				"printWidth": 999
 			}
 		}
 	]
