@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RadioStationController;
 
 Route::get("/", function () {
 	// ! Temp
@@ -11,3 +12,6 @@ Route::get("/", function () {
 Route::get("/testdaisy", function () {
 	return view("testdaisy");
 });
+
+//resource route inertia for radio stations
+Route::resource("stations", RadioStationController::class);

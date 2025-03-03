@@ -29,7 +29,7 @@ export default function Navbar() {
 							tabIndex={0}
 							className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
 							<li>
-								<Link>Browse</Link>
+								<Link href="/stations">Browse</Link>
 							</li>
 							<li>
 								<Link>Random Station</Link>
@@ -47,12 +47,14 @@ export default function Navbar() {
 							</li>
 						</ul>
 					</div>
-					<Link className="btn btn-ghost text-xl">Wavefinder</Link>
+					<Link href="/" className="btn btn-ghost text-xl">
+						Wavefinder
+					</Link>
 				</div>
 				<div className="navbar-center hidden lg:flex">
 					<ul className="menu menu-horizontal px-1">
 						<li>
-							<Link>Browse</Link>
+							<Link href="/stations">Browse</Link>
 						</li>
 						<li>
 							<Link>Random Station</Link>
@@ -73,8 +75,8 @@ export default function Navbar() {
 					</ul>
 				</div>
 				<div className="navbar-end">
-					<Link className="btn">Log in</Link>
-					<Link className="btn btn-primary">Register</Link>
+					<Link className="btn mx-2">Log in</Link>
+					<Link className="btn btn-primary mx-2">Register</Link>
 				</div>
 			</div>
 		</div>
