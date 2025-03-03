@@ -1,4 +1,7 @@
-export default function Home() {
+import React from "react";
+import RadioPlayerBar from "../Components/RadioPlayerBar";
+
+export default function Home({ radioStation }) {
 	return (
 		<div className="relative flex items-center justify-center overflow-hidden">
 			<div className="fixed -z-10 top-0 left-1/2 transform -translate-x-1/3 -translate-y-1/2 flex items-center justify-center">
@@ -11,6 +14,7 @@ export default function Home() {
 				<div className="flex flex-row justify-center mt-4">
 					<button className="btn">Button</button>
 					<button className="btn btn-primary ml-4">Primary</button>
+          <RadioPlayerBar station={radioStation} />
 				</div>
 			</div>
 		</div>
