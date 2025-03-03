@@ -4,7 +4,7 @@ export default function Footer() {
 			<aside>
 				<p>
 					Copyright © {new Date().getFullYear()} - All rights
-					reserved by MB Endorphin.
+					reserved by MB "Endorphin"
 				</p>
 			</aside>
 		</footer>
