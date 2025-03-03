@@ -1,7 +1,13 @@
-export default function Home() {
-    return <>
-        <h1>Home Test</h1>
-        <button className="btn">Button</button>
-        <button className="btn btn-primary">Primary</button>
-    </>
-}
+import React from "react";
+import RadioPlayerBar from "../Components/RadioPlayerBar";
+
+const Home = ({ radioStation }) => {
+	return (
+		<div>
+			<h1>Home Page</h1>
+			<RadioPlayerBar station={radioStation} />
+		</div>
+	);
+};
+
+export default Home;
