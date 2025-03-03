@@ -1,25 +1,26 @@
 {
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "build": "vite build",
-        "dev": "vite"
-    },
-    "devDependencies": {
-        "@prettier/plugin-php": "^0.22.4",
-        "@tailwindcss/vite": "^4.0.9",
-        "@vitejs/plugin-react": "^4.3.4",
-        "axios": "^1.7.4",
-        "concurrently": "^9.0.1",
-        "laravel-vite-plugin": "^1.2.0",
-        "prettier": "^3.5.2",
-        "tailwindcss": "^4.0.9",
-        "vite": "^6.0.11"
-    },
-    "dependencies": {
-        "@inertiajs/react": "^2.0.3",
-        "daisyui": "^5.0.0",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0"
-    }
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite"
+	},
+	"devDependencies": {
+		"@prettier/plugin-php": "^0.22.4",
+		"@shufo/prettier-plugin-blade": "^1.15.3",
+		"@tailwindcss/vite": "^4.0.9",
+		"@vitejs/plugin-react": "^4.3.4",
+		"axios": "^1.7.4",
+		"concurrently": "^9.0.1",
+		"laravel-vite-plugin": "^1.2.0",
+		"prettier": "^3.5.3",
+		"tailwindcss": "^4.0.9",
+		"vite": "^6.0.11"
+	},
+	"dependencies": {
+		"@inertiajs/react": "^2.0.3",
+		"daisyui": "^5.0.0",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0"
+	}
 }
