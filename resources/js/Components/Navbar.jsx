@@ -62,7 +62,7 @@ export default function Navbar() {
 						<li>
 							<details>
 								<summary>TBA</summary>
-								<ul className="p-2">
+								<ul className="p-2 z-20">
 									<li>
 										<Link>Submenu 1</Link>
 									</li>

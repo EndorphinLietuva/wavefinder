@@ -39,7 +39,8 @@ class RadioStationController extends Controller
 	 */
 	public function show(string $id)
 	{
-		//
+		$radioStation = RadioStation::findOrFail($id); // Use findOrFail for 404
+		return inertia("Station", ["radioStation" => $radioStation]);
 	}
 
 	/**
