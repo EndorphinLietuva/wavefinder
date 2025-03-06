@@ -1,5 +1,6 @@
 // resources/js/Pages/Stations/Show.jsx
 import { Link } from "@inertiajs/react";
+import RadioPlayerBar from "../Components/RadioPlayerBar";
 
 export default function Show({ radioStation }) {
 	return (
@@ -27,12 +28,15 @@ export default function Show({ radioStation }) {
 				)}
 			</div>
 
-			<div className="actions">
+			<div>
 				<Link
 					href={route("stations.index")}
 					className="btn btn-primary px-4 py-2 rounded">
 					&larr; Back to All Stations
 				</Link>
+			</div>
+			<div className="fixed bottom-0 w-full z-10">
+				<RadioPlayerBar radioStation={radioStation} />
 			</div>
 		</div>
 	);

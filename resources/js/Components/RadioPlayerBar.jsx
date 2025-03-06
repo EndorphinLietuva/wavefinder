@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Howl } from "howler";
 
-const RadioPlayerBar = ({ station }) => {
+const RadioPlayerBar = ({ radioStation }) => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [volume, setVolume] = useState(50);
 	const soundRef = useRef(null);
@@ -9,7 +9,7 @@ const RadioPlayerBar = ({ station }) => {
 	// Initialize Howl only once or when station.url_resolved changes
 	useEffect(() => {
 		soundRef.current = new Howl({
-			src: [station.url_resolved], // Ensure this is an array, as Howl expects one
+			src: [radioStation.url_resolved], // Ensure this is an array, as Howl expects one
 			html5: true, // Enables streaming large files
 			volume: volume / 100 // Convert percentage to range [0, 1]
 		});
@@ -19,7 +19,7 @@ const RadioPlayerBar = ({ station }) => {
 				soundRef.current.unload();
 			}
 		};
-	}, [station.url_resolved]); // only re-run if the stream URL changes
+	}, [radioStation.url_resolved]); // only re-run if the stream URL changes
 
 	const handlePlayPause = () => {
 		if (!soundRef.current) return;
@@ -42,16 +42,16 @@ const RadioPlayerBar = ({ station }) => {
 	};
 
 	return (
-		<div className="radio-player-bar bg-base-300 flex justify-between items-center p-4">
-			<div className="radio-player-info flex">
+		<div className="bg-base-300 flex justify-between items-center p-4">
+			<div className="flex">
 				<img
-					src={station.favicon}
-					alt={`${station.name} icon`}
+					src={radioStation.favicon}
+					alt={`${radioStation.name} icon`}
 					className="w-32"
 				/>
-				<div className="station-info px-2">
-					<h4 className="font-bold">{station.name}</h4>
-					<p>{station.info}</p>
+				<div className="px-2">
+					<h4 className="font-bold">{radioStation.name}</h4>
+					<p>{radioStation.info}</p>
 				</div>
 			</div>
 			<button className="btn btn-primary" onClick={handlePlayPause}>
