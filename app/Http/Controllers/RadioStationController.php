@@ -18,6 +18,13 @@ class RadioStationController extends Controller
 		return inertia("Stations", ["stations" => $radioStations]);
 	}
 
+	public function randomStation()
+	{
+		//random radio station
+		$randomStation = RadioStation::inRandomOrder()->first();
+		return inertia("Station", ["radioStation" => $randomStation]);
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 */

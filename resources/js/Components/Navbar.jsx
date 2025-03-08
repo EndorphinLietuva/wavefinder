@@ -59,7 +59,7 @@ export default function Navbar() {
 							<Link href="/stations">Browse</Link>
 						</li>
 						<li>
-							<Link>Random Station</Link>
+							<Link href={route("random")}>Random Station</Link>
 						</li>
 						<li>
 							<details>

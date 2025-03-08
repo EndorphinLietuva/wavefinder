@@ -16,7 +16,9 @@ Route::get("/testdaisy", function () {
 	return view("testdaisy");
 });
 
-//resource route inertia for radio stations
+Route::get("/random", [RadioStationController::class, "randomStation"])->name(
+	"random"
+);
 Route::resource("stations", RadioStationController::class);
 
 Route::get("/login", [LoginController::class, "showLoginForm"])->name("login");
