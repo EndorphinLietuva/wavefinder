@@ -47,7 +47,7 @@ const RadioPlayerBar = ({ radioStation }) => {
 				<img
 					src={radioStation.favicon}
 					alt={`${radioStation.name} icon`}
-					className="w-32"
+					className="w-16"
 				/>
 				<div className="px-2">
 					<h4 className="font-bold">{radioStation.name}</h4>

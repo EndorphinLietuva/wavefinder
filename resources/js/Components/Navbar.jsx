@@ -89,6 +89,11 @@ export default function Navbar() {
 								className="btn mx-2">
 								Logout
 							</Link>
+							<Link
+								href={route("profile")}
+								className="btn btn-primary mx-2">
+								Profile
+							</Link>
 						</>
 					) : (
 						<>

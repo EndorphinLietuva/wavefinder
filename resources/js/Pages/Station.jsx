@@ -2,7 +2,7 @@
 import { Link } from "@inertiajs/react";
 import RadioPlayerBar from "../Components/RadioPlayerBar";
 
-export default function Show({ radioStation }) {
+export default function Station({ radioStation }) {
 	return (
 		<div>
 			<h1 className="text-2xl font-bold mb-4">{radioStation.name}</h1>

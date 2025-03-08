@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Home({ radioStation }) {
 	return (
 		<div className="w-full h-full absolute inset-0 flex">
