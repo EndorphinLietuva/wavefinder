@@ -1,6 +1,8 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 
 export default function Navbar() {
+	const { auth } = usePage().props;
+
 	return (
 		<div>
 			<div className="navbar bg-base-100 shadow-sm">
@@ -75,8 +77,31 @@ export default function Navbar() {
 					</ul>
 				</div>
 				<div className="navbar-end">
-					<Link className="btn mx-2">Log in</Link>
-					<Link className="btn btn-primary mx-2">Register</Link>
+					{auth.user ? (
+						<>
+							<span className="mr-4">
+								Hello, {auth.user.name}
+							</span>
+							<Link
+								href={route("logout")}
+								method="post"
+								as="button"
+								className="btn mx-2">
+								Logout
+							</Link>
+						</>
+					) : (
+						<>
+							<Link href={route("login")} className="btn mx-2">
+								Log in
+							</Link>
+							<Link
+								href={route("register")}
+								className="btn btn-primary mx-2">
+								Register
+							</Link>
+						</>
+					)}
 				</div>
 			</div>
 		</div>
